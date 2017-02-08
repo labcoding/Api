@@ -11,6 +11,11 @@ use LabCoding\Api\Listener;
 
 return [
 
+    include_once 'entity_map.config.php',
+    include_once 'router.config.php',
+    include_once 'sebaks-view.config.php',
+    include_once 'api-router.config.php',
+    
     'api' => [
         'docs' => dirname(__DIR__) . '/docs/petstore.yaml',
 
