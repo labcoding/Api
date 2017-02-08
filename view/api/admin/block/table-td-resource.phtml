@@ -1,0 +1,9 @@
+<?php
+/** @var \Zend\View\Model\ViewModel $viewModel */
+$viewModel = $this->viewModel()->getCurrent();
+
+?>
+<td>
+    <span class="label label-default"><?= $viewModel->getVariable('requestMethod'); ?></span>:
+    <?= $viewModel->getVariable('value'); ?>
+</td>

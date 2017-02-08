@@ -1,0 +1,103 @@
+<?php
+/** @var \Zend\View\Model\ModelInterface $viewModel */
+$viewModel = $this->viewModel()->getCurrent();
+$icon = $viewModel->getVariable('icon');
+$title = $viewModel->getVariable('title');
+
+?>
+<section class="content-header">
+    <h1><i class="menu-icon fa fa-<?= $icon; ?>"></i> <?= $title; ?></h1>
+</section>
+
+<section class="content">
+    <div class="row">
+        <div class="col-lg-12">
+            <div id="message-bar" class="swagger-ui-wrap" data-sw-translate>&nbsp;</div>
+            <div id="swagger-ui-container" class="swagger-ui-wrap"></div>
+        </div>
+    </div>
+</section>
+<?php
+$this->headLink()
+//    ->prependStylesheet($this->basePath('/plugins/swagger-ui/dist/css/reset.css'))
+    ->prependStylesheet($this->basePath('/plugins/swagger-ui/dist/css/screen.css'))
+    ->prependStylesheet($this->basePath('/plugins/swagger-ui/dist/css/print.css'))
+;
+?>
+<?php
+$this->headScript()
+    ->appendFile($this->basePath('/plugins/swagger-ui/dist/lib/object-assign-pollyfill.js'))
+//    ->appendFile($this->basePath('/plugins/swagger-ui/dist/lib/jquery-1.8.0.min.js'))
+    ->appendFile($this->basePath('/plugins/swagger-ui/dist/lib/jquery.slideto.min.js'))
+    ->appendFile($this->basePath('/plugins/swagger-ui/dist/lib/jquery.wiggle.min.js'))
+    ->appendFile($this->basePath('/plugins/swagger-ui/dist/lib/jquery.ba-bbq.min.js'))
+    ->appendFile($this->basePath('/plugins/swagger-ui/dist/lib/handlebars-4.0.5.js'))
+    ->appendFile($this->basePath('/plugins/swagger-ui/dist/lib/lodash.min.js'))
+    ->appendFile($this->basePath('/plugins/swagger-ui/dist/lib/backbone-min.js'))
+    ->appendFile($this->basePath('/plugins/swagger-ui/dist/swagger-ui.js'))
+    ->appendFile($this->basePath('/plugins/swagger-ui/dist/lib/highlight.9.1.0.pack.js'))
+    ->appendFile($this->basePath('/plugins/swagger-ui/dist/lib/highlight.9.1.0.pack_extended.js'))
+    ->appendFile($this->basePath('/plugins/swagger-ui/dist/lib/jsoneditor.min.js'))
+    ->appendFile($this->basePath('/plugins/swagger-ui/dist/lib/marked.js'))
+    ->appendFile($this->basePath('/plugins/swagger-ui/dist/lib/swagger-oauth.js'))
+;
+?>
+
+<?php $this->inlineScript()->captureStart();
+echo <<<JS
+$(function () {
+      var url = window.location.search.match(/url=([^&]+)/);
+      if (url && url.length > 1) {
+        url = decodeURIComponent(url[1]);
+      } else {
+        url = "http://petstore.swagger.io/v2/swagger.json";
+      }
+
+      hljs.configure({
+        highlightSizeThreshold: 5000
+      });
+
+      // Pre load translate...
+      if(window.SwaggerTranslator) {
+        window.SwaggerTranslator.translate();
+      }
+      window.swaggerUi = new SwaggerUi({
+        url: url,
+        dom_id: "swagger-ui-container",
+        supportedSubmitMethods: ['get', 'post', 'put', 'delete', 'patch'],
+        onComplete: function(swaggerApi, swaggerUi){
+          if(typeof initOAuth == "function") {
+            initOAuth({
+              clientId: "your-client-id",
+              clientSecret: "your-client-secret-if-required",
+              realm: "your-realms",
+              appName: "your-app-name",
+              scopeSeparator: " ",
+              additionalQueryStringParams: {}
+            });
+          }
+
+          if(window.SwaggerTranslator) {
+            window.SwaggerTranslator.translate();
+          }
+        },
+        onFailure: function(data) {
+          log("Unable to Load SwaggerUI");
+        },
+        docExpansion: "none",
+        jsonEditor: false,
+        defaultModelRendering: 'schema',
+        showRequestHeaders: false,
+        showOperationIds: false
+      });
+
+      window.swaggerUi.load();
+
+      function log() {
+        if ('console' in window) {
+          console.log.apply(console, arguments);
+        }
+      }
+  });
+JS;
+$this->inlineScript()->captureEnd() ?>

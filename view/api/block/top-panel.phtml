@@ -1,0 +1,44 @@
+<header class="main-header">
+    <nav class="navbar navbar-default navbar-fixed-top" style="margin-bottom: 0px;">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <a class="navbar-brand" href="javascript::void(0);" onclick="window.history.back()">
+                    <i class="fa fa-arrow-left"></i>
+                </a>
+            </div>
+
+            <div class="navbar-text">
+                <h4 style="margin: 0;">
+                    <i class="fa fa-file-text"></i>
+                    API. Documentation
+                </h4>
+            </div>
+
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav">
+                    <li>
+                        <a href="<?= $this->url('admin-api-console'); ?>">
+                            <i class="fa fa-terminal"></i>
+                            Console
+                        </a>
+                    </li>
+                    <li>
+                        <a href="<?= $this->url('admin-logentry-list'); ?>">
+                            <i class="fa fa-bug"></i>
+                            Logs
+                        </a>
+                    </li>
+                </ul>
+
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a href="<?= $this->url('home'); ?>">
+                            Go to site
+                            <i class="fa fa-share-square-o"></i>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+</header>

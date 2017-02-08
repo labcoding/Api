@@ -1,0 +1,50 @@
+<?php
+/** @var \Zend\View\Model\ViewModel $viewModel */
+$viewModel = $this->viewModel()->getCurrent();
+$tdViews = $viewModel->getChildrenByCaptureTo('table-td');
+$trCollapseViews = $viewModel->getChildrenByCaptureTo('table-tr-collapse');
+?>
+
+<tr><?php foreach ($tdViews as $view) echo $this->render($view) ?></tr>
+<?php foreach ($trCollapseViews as $view): ?>
+
+    <tr>
+        <td colspan="100" style="margin: 0; padding: 0">
+            <div class="collapse" id="<?= $view->getVariable('target'); ?>">
+                <div class="well">
+                    <label>Request</label>
+                    <pre><?= $viewModel->getVariable('requestMethod'); ?>:&nbsp;<?= $viewModel->getVariable('resource'); ?></pre>
+
+                    <hr>
+                    <a data-toggle="collapse" href="#collapse-request-headers-<?= $view->getVariable('target'); ?>">
+                        <strong>Request headers</strong>
+                    </a>
+                    <div id="collapse-request-headers-<?= $view->getVariable('target'); ?>" class="collapse" style="height: 0px;">
+                        <br/>
+                        <pre><?= json_encode(json_decode($view->getVariable('requestHeaders')), JSON_PRETTY_PRINT); ?></pre>
+                    </div>
+
+                    <?php if($view->getVariable('requestBody') != null): ?>
+                        <hr>
+                        <a data-toggle="collapse" href="#collapse-request-body-<?= $view->getVariable('target'); ?>">
+                            <strong>Request body</strong>
+                        </a>
+                        <div id="collapse-request-body-<?= $view->getVariable('target'); ?>" class="collapse" style="height: 0px;">
+                            <br/>
+                            <pre><?= json_encode(json_decode($view->getVariable('requestBody')), JSON_PRETTY_PRINT); ?></pre>
+                        </div>
+                    <?php endif; ?>
+
+                    <hr>
+                    <label>Response body</label>
+                    <?php if (!empty($view->getVariable('jsonPrettyPrint'))): ?>
+                        <pre><?= json_encode(json_decode($view->getVariable('value')), JSON_PRETTY_PRINT); ?></pre>
+                        <?php else: ?>
+                        <pre><?= $view->getVariable('value')?></pre>
+                    <?php endif; ?>
+                </div>
+            </div>
+        </td>
+    </tr>
+<?php endforeach; ?>
+

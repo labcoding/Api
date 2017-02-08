@@ -1,0 +1,54 @@
+<?php
+/** @var \Zend\View\Model\ModelInterface $viewModel */
+$viewModel = $this->viewModel()->getCurrent();
+$icon = $viewModel->getVariable('icon');
+$title = $viewModel->getVariable('icon');
+$allowedMethods = $viewModel->getVariable('allowedMethods', []);
+
+?>
+<div class="tab-pane active" id="query-builder">
+    <div class="input-group query">
+        <div class="input-group-btn">
+            <button id="method-btn" type="button" class="btn btn-warning dropdown-toggle" data-toggle="dropdown" tabindex="-1">
+                GET <span class="fa fa-caret-down"></span>
+            </button>
+            <ul class="dropdown-menu" id="methods">
+                <?php foreach($allowedMethods as $allowedMethod): ?>
+                    <li>
+                        <a href="javascript:void(0)" data-target="<?= strtolower($allowedMethod); ?>">
+                            <?= $allowedMethod; ?>
+                        </a>
+                    </li>
+                <?php endforeach; ?>
+            </ul>
+        </div>
+            <input id="query" class="form-control" type="text" value="<?= $defaultRoute; ?>" placeholder="/users">
+        <div class="input-group">
+        </div>
+        <span class="input-group-btn">
+            <button type="button" class="btn btn-info" id="send-btn">Send!</button>
+        </span>
+    </div>
+
+    <div class="form-group" id="post-body" style="display: none;">
+        <textarea rows="16" class="form-control"></textarea>
+    </div>
+
+    <hr>
+    <div class="form-group">
+        <label>Request</label>
+        <pre class="request"></pre>
+    </div>
+
+    <hr>
+    <div class="form-group">
+        <label>Response headers</label>
+        <pre class="response-headers"></pre>
+    </div>
+
+    <hr>
+    <div class="form-group">
+        <label>Response body</label>
+        <pre class="response"></pre>
+    </div>
+</div>

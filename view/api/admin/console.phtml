@@ -1,0 +1,32 @@
+<?php
+/** @var \Zend\View\Model\ModelInterface $viewModel */
+$viewModel = $this->viewModel()->getCurrent();
+$icon = $viewModel->getVariable('icon');
+$title = $viewModel->getVariable('title');
+
+?>
+<section class="content-header">
+    <h1><i class="menu-icon fa fa-<?= $icon; ?>"></i> <?= $title; ?></h1>
+</section>
+
+<section class="content">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="nav-tabs-custom">
+                <ul class="nav nav-tabs">
+                    <li class="active">
+                        <a href="#query-builder" data-toggle="tab" aria-expanded="true">
+                            <i class="fa fa-exchange"></i>
+                            Query builder
+                        </a>
+                    </li>
+                </ul>
+
+                <div class="tab-content">
+                    <?= $this->partial('api/admin/console/query-builder.phtml'); ?>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<?php $this->headScript()->appendFile('/js/module/api/console.js'); ?>
