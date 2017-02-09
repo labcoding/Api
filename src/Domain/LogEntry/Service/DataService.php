@@ -25,8 +25,8 @@ class DataService implements DataServiceInterface
     private $agent;
 
     public function __construct(
-        Request $request,
-        Response $response,
+        $request,
+        $response,
         Agent $agent
     )
     {
@@ -44,7 +44,7 @@ class DataService implements DataServiceInterface
             'platform' => $this->agent->platform(),
             'resource' => $this->request->getRequestUri(),
             'requestMethod' => $this->request->getMethod(),
-            'requestHeaders' => json_encode($this->request->getHeaders()->toArray()),
+            'requestHeaders' => json_encode($this->request->getHeaders()->toArray(), JSON_UNESCAPED_SLASHES),
             'requestBody' => $this->request->getContent(),
             'responseCode' => $this->response->getStatusCode(),
             'responseBody' => $this->response->getBody(),

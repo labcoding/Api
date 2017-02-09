@@ -7,7 +7,6 @@ $trCollapseViews = $viewModel->getChildrenByCaptureTo('table-tr-collapse');
 
 <tr><?php foreach ($tdViews as $view) echo $this->render($view) ?></tr>
 <?php foreach ($trCollapseViews as $view): ?>
-
     <tr>
         <td colspan="100" style="margin: 0; padding: 0">
             <div class="collapse" id="<?= $view->getVariable('target'); ?>">
@@ -21,7 +20,7 @@ $trCollapseViews = $viewModel->getChildrenByCaptureTo('table-tr-collapse');
                     </a>
                     <div id="collapse-request-headers-<?= $view->getVariable('target'); ?>" class="collapse" style="height: 0px;">
                         <br/>
-                        <pre><?= json_encode(json_decode($view->getVariable('requestHeaders')), JSON_PRETTY_PRINT); ?></pre>
+                        <pre><?= json_encode(json_decode($view->getVariable('requestHeaders')), JSON_PRETTY_PRINT|JSON_UNESCAPED_SLASHES); ?></pre>
                     </div>
 
                     <?php if($view->getVariable('requestBody') != null): ?>
@@ -31,14 +30,14 @@ $trCollapseViews = $viewModel->getChildrenByCaptureTo('table-tr-collapse');
                         </a>
                         <div id="collapse-request-body-<?= $view->getVariable('target'); ?>" class="collapse" style="height: 0px;">
                             <br/>
-                            <pre><?= json_encode(json_decode($view->getVariable('requestBody')), JSON_PRETTY_PRINT); ?></pre>
+                            <pre><?= json_encode(json_decode($view->getVariable('requestBody')), JSON_PRETTY_PRINT|JSON_UNESCAPED_SLASHES); ?></pre>
                         </div>
                     <?php endif; ?>
 
                     <hr>
                     <label>Response body</label>
                     <?php if (!empty($view->getVariable('jsonPrettyPrint'))): ?>
-                        <pre><?= json_encode(json_decode($view->getVariable('value')), JSON_PRETTY_PRINT); ?></pre>
+                        <pre><?= json_encode(json_decode($view->getVariable('value')), JSON_PRETTY_PRINT|JSON_UNESCAPED_SLASHES); ?></pre>
                         <?php else: ?>
                         <pre><?= $view->getVariable('value')?></pre>
                     <?php endif; ?>

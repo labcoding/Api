@@ -2,29 +2,22 @@
   "swagger": "2.0",
   "info": {
     "title": "Uber API",
-    "description": "This is a sample server Petstore server.",
-    "version": "1.0.0",
-    "x-logo": {
-      "url": "https://rebilly.github.io/ReDoc/petstore-logo.png"
-    }
+    "description": "Move your app forward with the Uber API",
+    "version": "1.0.0"
   },
-  "host": "localhost",
+  "host": "api.uber.com",
   "schemes": [
-    "https", "http"
+    "https"
   ],
-  "basePath": "/api/v1",
-  "externalDocs": {
-    "description": "Find out how to create Github repo for your OpenAPI spec.",
-    "url": "https://github.com/Rebilly/generator-openapi-repo"
-  },
+  "basePath": "/v1",
   "produces": [
     "application/json"
   ],
   "paths": {
     "/products": {
       "get": {
-        "summary": "GET: /api/v1/products",
-        "description": "The Products endpoint returns information about the *Uber* products\noffered at a given location. The response includes the display name\nand other details about each product, and lists the products in the\nproper display order.\n",
+        "summary": "Product Types",
+        "description": "The Products endpoint returns information about the Uber products offered at a given location. The response includes the display name and other details about each product, and lists the products in the proper display order.",
         "parameters": [
           {
             "name": "latitude",
@@ -68,7 +61,7 @@
     "/estimates/price": {
       "get": {
         "summary": "Price Estimates",
-        "description": "The Price Estimates endpoint returns an estimated price range\nfor each product offered at a given location. The price estimate is\nprovided as a formatted string with the full price range and the localized\ncurrency symbol.<br><br>The response also includes low and high estimates,\nand the [ISO 4217](http://en.wikipedia.org/wiki/ISO_4217) currency code for\nsituations requiring currency conversion. When surge is active for a particular\nproduct, its surge_multiplier will be greater than 1, but the price estimate\nalready factors in this multiplier.\n",
+        "description": "The Price Estimates endpoint returns an estimated price range for each product offered at a given location. The price estimate is provided as a formatted string with the full price range and the localized currency symbol.<br><br>The response also includes low and high estimates, and the [ISO 4217](http://en.wikipedia.org/wiki/ISO_4217) currency code for situations requiring currency conversion. When surge is active for a particular product, its surge_multiplier will be greater than 1, but the price estimate already factors in this multiplier.",
         "parameters": [
           {
             "name": "start_latitude",
@@ -247,7 +240,6 @@
   },
   "definitions": {
     "Product": {
-      "type": "object",
       "properties": {
         "product_id": {
           "type": "string",
@@ -272,7 +264,6 @@
       }
     },
     "PriceEstimate": {
-      "type": "object",
       "properties": {
         "product_id": {
           "type": "string",
@@ -305,7 +296,6 @@
       }
     },
     "Profile": {
-      "type": "object",
       "properties": {
         "first_name": {
           "type": "string",
@@ -330,7 +320,6 @@
       }
     },
     "Activity": {
-      "type": "object",
       "properties": {
         "uuid": {
           "type": "string",
@@ -339,7 +328,6 @@
       }
     },
     "Activities": {
-      "type": "object",
       "properties": {
         "offset": {
           "type": "integer",
@@ -359,13 +347,12 @@
         "history": {
           "type": "array",
           "items": {
-            "$ref": "#/definitions/Activity"
-          }
+              "$ref": "#/definitions/Activity"
+           }
         }
       }
     },
     "Error": {
-      "type": "object",
       "properties": {
         "code": {
           "type": "integer",

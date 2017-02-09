@@ -12,8 +12,9 @@ class ResultJsonViewModel extends JsonModel
     {
         $result = $this->getVariable('result', []);
         if($result instanceof \ArrayObject) {
+            $result = [];
             foreach($this->getVariable('result') as $key => $entity) {
-                $result[$key] = $this->prepareResult($entity);
+                $result[] = $this->prepareResult($entity);
             }
         }
 
@@ -39,6 +40,16 @@ class ResultJsonViewModel extends JsonModel
      */
     public function prepareResult(Entity $result)
     {
-        return $result->extract();
+        $data = $result->extract();
+
+        if(isset($data['createdDt'])) {
+            $data['createdDt'] = date("c", strtotime($data['createdDt']));
+        }
+        if(isset($data['updatedDt'])) {
+            $data['updatedDt'] = date("c", strtotime($data['updatedDt']));
+        }
+
+        return $data;
     }
+
 }

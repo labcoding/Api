@@ -4,6 +4,7 @@ $viewModel = $this->viewModel()->getCurrent();
 $icon = $viewModel->getVariable('icon');
 $title = $viewModel->getVariable('icon');
 $allowedMethods = $viewModel->getVariable('allowedMethods', []);
+$defaultRoute = $viewModel->getVariable('defaultRoute', '/');
 
 ?>
 <div class="tab-pane active" id="query-builder">
@@ -22,9 +23,7 @@ $allowedMethods = $viewModel->getVariable('allowedMethods', []);
                 <?php endforeach; ?>
             </ul>
         </div>
-            <input id="query" class="form-control" type="text" value="<?= $defaultRoute; ?>" placeholder="/users">
-        <div class="input-group">
-        </div>
+        <input id="query" class="form-control" type="text" value="<?= $defaultRoute; ?>" placeholder="/users">
         <span class="input-group-btn">
             <button type="button" class="btn btn-info" id="send-btn">Send!</button>
         </span>
@@ -42,8 +41,16 @@ $allowedMethods = $viewModel->getVariable('allowedMethods', []);
 
     <hr>
     <div class="form-group">
-        <label>Response headers</label>
-        <pre class="response-headers"></pre>
+        <a data-toggle="collapse" href="#collapse-response-headers">
+            <label style="cursor: pointer;">
+                Response headers
+            </label>
+        </a>
+        <strong class="response-code"></strong>
+
+        <div id="collapse-response-headers" class="collapse">
+            <pre class="response-headers"></pre>
+        </div>
     </div>
 
     <hr>

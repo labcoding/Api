@@ -90,7 +90,6 @@ class ApiError implements ErrorInterface
     public function notFoundByRequestedCriteria($criteriaErrors)
     {
         $this->response->setStatusCode(404);
-        $this->response->getHeaders()->addHeaderLine("Content-Type", "application/json");
         $this->response->setContent(json_encode($criteriaErrors));
 
         return $this->response;

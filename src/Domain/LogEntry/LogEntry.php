@@ -12,8 +12,8 @@ class LogEntry extends Entity
      * @var array
      */
     public static $allowedMethods = [
-        'GET',
-        'POST',
+        'GET' => 'GET',
+        'POST' => 'POST',
     ];
 
     /**

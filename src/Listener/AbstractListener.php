@@ -5,6 +5,7 @@ namespace LabCoding\Api\Listener;
 use Zend\EventManager\AbstractListenerAggregate;
 use Zend\EventManager\EventInterface;
 use Zend\Mvc\Router\Http\RouteMatch;
+use Zend\Http\Request as HttpRequest;
 use LabCoding\Api\Service\ApiService;
 
 abstract class AbstractListener extends AbstractListenerAggregate
@@ -15,12 +16,15 @@ abstract class AbstractListener extends AbstractListenerAggregate
         /** @var RouteMatch $routeMatch */
         $routeMatch = $e->getRouteMatch();
 
-        if (!$routeMatch) {
+        if (!$routeMatch || !($e->getRequest() instanceof HttpRequest)) {
             return false;
         }
 
         $matchedRoute = $routeMatch->getMatchedRouteName();
 
-        return (bool)(isset(ApiService::$apiRoutes[$matchedRoute]));
+        // for child routes
+        $explode = explode('/', $matchedRoute);
+
+        return (bool)(isset(ApiService::$apiRoutes[$explode[0]]));
     }
 }

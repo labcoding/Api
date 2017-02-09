@@ -9,7 +9,6 @@ use Zend\Mvc\MvcEvent;
 use Zend\EventManager\EventInterface;
 use Zend\Http\PhpEnvironment\Request;
 use Zend\Console\Request as ConsoleRequest;
-use StaticPages\Action\Frontend;
 use Zend\Mvc\Router\Http\TreeRouteStack;
 use LabCoding\Api\Service\ApiService;
 
@@ -28,7 +27,7 @@ class RouteListener extends AbstractListenerAggregate implements ListenerAggrega
      */
     public function attach(EventManagerInterface $events)
     {
-        $this->listeners[] = $events->attach(MvcEvent::EVENT_ROUTE, [$this, 'route'], 100);
+        $this->listeners[] = $events->attach(MvcEvent::EVENT_ROUTE, [$this, 'route'], 10);
     }
 
     /**
@@ -54,21 +53,75 @@ class RouteListener extends AbstractListenerAggregate implements ListenerAggrega
         $apiConfig = $config['api'];
 
         foreach($config['api-router']['routes'] as $routeName => $route) {
-            ApiService::$apiRoutes[$routeName] = $route['options']['route'];
+            if(!isset($route['type'])) {
+                $route['type'] = 'Segment';
+            }
 
             if(!isset($route['options']['defaults'])) {
                 $route['options']['defaults'] = [];
             }
+            $defaults = $route['options']['defaults'];
 
-            $options = $route['options']['defaults'];
-            $options['controller'] = (isset($options['controller'])) ? $options['controller'] : $apiConfig['routerOptions']['controller'];
-            $options['viewModel'] = (isset($options['viewModel'])) ? $options['viewModel'] : $apiConfig['routerOptions']['viewModel'];
+            $defaults['basePath'] = (isset($defaults['basePath'])) ? $defaults['basePath'] : $apiConfig['basePath'];
+            if(strpos($defaults['basePath'], '/') === 0) {
+                $defaults['basePath'] = mb_substr($defaults['basePath'], 1);
+            }
 
-            $route['options']['defaults'] = $options;
+            $defaults['v'] = (isset($defaults['v'])) ? $defaults['v'] : $apiConfig['version'];
+
+            $path = $this->buildPath($defaults);
+            if(isset($defaults['basePath'])) {
+                unset($defaults['basePath']);
+            }
+            if(isset($defaults['v'])) {
+                unset($defaults['v']);
+            }
+
+            $route['options']['route'] = $path . $route['options']['route'];
+
+            $defaults['controller'] = (isset($defaults['controller'])) ? $defaults['controller'] : $apiConfig['routerOptions']['controller'];
+            $defaults['viewModel'] = (isset($defaults['viewModel'])) ? $defaults['viewModel'] : $apiConfig['routerOptions']['viewModel'];
+            $defaults['allowedMethods'] = (isset($defaults['allowedMethods'])) ? $defaults['allowedMethods'] : $apiConfig['routerOptions']['allowedMethods'];
+
+            $route['options']['defaults'] = $defaults;
 
             $router->addRoute($routeName, $route);
+
+            ApiService::$apiRoutes[$routeName] = $routeName;
+
+//            if(isset($route['may_terminate']) && $route['may_terminate'] == true) {
+//                ApiService::$apiRoutes[$routeName] = $stack->assemble([], ['name' => $routeName]);
+//            }
+//
+//            if(isset($route['child_routes']) && !empty($route['child_routes'])) {
+//                foreach($route['child_routes'] as $name => $childRoute) {
+//                    $childRouteName = $routeName . '/' . $name;
+//                    ApiService::$apiRoutes[$childRouteName] = $stack->assemble([], ['name' => $childRouteName]);
+//                }
+//            }
         }
 
         return;
+    }
+
+    /**
+     * @param array $defaults
+     * @return string
+     */
+    private function buildPath(array $defaults)
+    {
+        $params = [
+            'basePath' => $defaults['basePath'],
+            'v' => $defaults['v'],
+        ];
+
+        $path = '';
+        foreach($params as $key => $param) {
+            if($param != "") {
+                $path .= '/' . $param;
+            }
+        }
+
+        return $path;
     }
 }

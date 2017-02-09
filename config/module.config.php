@@ -11,18 +11,25 @@ use LabCoding\Api\Listener;
 
 return [
 
-    include_once 'entity_map.config.php',
-    include_once 'router.config.php',
-    include_once 'sebaks-view.config.php',
-    include_once 'api-router.config.php',
-    
+    'entity_map' => require_once 'entity_map.config.php',
+    'router' => require_once 'router.config.php',
+    'sebaks-view' => require_once 'sebaks-view.config.php',
+    'api-router' => require_once 'api-router.config.php',
+
+    /**
+     * default route schema: /basePath/v/path
+     */
     'api' => [
-        'docs' => dirname(__DIR__) . '/docs/petstore.yaml',
+        'version' => 'v1',
+        'basePath' => '/api',
+
+        'docs' => dirname(__DIR__) . '/examples/annotations',
 
         // default route options
         'routerOptions' => [
             'controller' => 'sebaks-zend-mvc-api-controller',
             'viewModel' => ViewModel\ResultJsonViewModel::class,
+            'allowedMethods' => ['GET'],
         ],
     ],
 
@@ -46,6 +53,28 @@ return [
         ],
         'aliases' => [
             'Api\ErrorModel\ApiError' => 'sebaks-zend-mvc-api-error-factory'
+        ],
+    ],
+
+    'controllers' => [
+        'factories' => [
+            Action\Console\InitController::class => Action\Console\InitControllerFactory::class,
+        ],
+    ],
+
+    'console' => [
+        'router' => [
+            'routes' => [
+                'feedback-init' => [
+                    'options' => [
+                        'route' => 'api init',
+                        'defaults' => [
+                            'controller' => Action\Console\InitController::class,
+                            'action' => 'run'
+                        ],
+                    ],
+                ],
+            ],
         ],
     ],
 

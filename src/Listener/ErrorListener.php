@@ -7,8 +7,8 @@ use Zend\EventManager\ListenerAggregateInterface;
 use LabCoding\Api\ErrorModel\ApiError;
 use Zend\EventManager\EventManagerInterface;
 use Zend\Mvc\MvcEvent;
-use Zend\Http\PhpEnvironment\Request;
 use Zend\Http\Response as HttpResponse;
+use Zend\Http\Request as HttpRequest;
 use Zend\Mvc\Application;
 use Zend\Http\Header\ContentType;
 use Zend\Json\Json;
@@ -54,17 +54,21 @@ class ErrorListener extends AbstractListenerAggregate implements ListenerAggrega
     public function dispatchError(MvcEvent $e)
     {
 
-        /** @var Request $request */
+        $error = $e->getError();
+        if (empty($error)) {
+            return false;
+        }
+
+        /** @var HttpRequest $request */
         $request = $e->getRequest();
+
+        if(!($request instanceof HttpRequest)) {
+            return false;
+        }
 
         /** @var ContentType $contentType */
         $contentType = $request->getHeader('Content-type');
         if($contentType->getMediaType() !== 'application/json') {
-            return false;
-        }
-
-        $error = $e->getError();
-        if (empty($error)) {
             return false;
         }
 
@@ -123,8 +127,12 @@ class ErrorListener extends AbstractListenerAggregate implements ListenerAggrega
      */
     public function onFatalError(MvcEvent $e)
     {
-        /** @var Request $request */
+        /** @var HttpRequest $request */
         $request = $e->getRequest();
+
+        if(!($request instanceof HttpRequest)) {
+            return false;
+        }
 
         /** @var ContentType $contentType */
         $contentType = $request->getHeader('Content-type');
