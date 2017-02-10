@@ -31,7 +31,7 @@ class ResultJsonViewModel extends JsonModel
             ];
         }
 
-        return Json::encode((array)$result);
+        return Json::encode($result);
     }
 
     /**
