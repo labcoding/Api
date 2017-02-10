@@ -65,10 +65,9 @@ class ErrorListener extends AbstractListenerAggregate implements ListenerAggrega
         if(!($request instanceof HttpRequest)) {
             return false;
         }
-
         /** @var ContentType $contentType */
         $contentType = $request->getHeader('Content-type');
-        if($contentType->getMediaType() !== 'application/json') {
+        if($contentType === false || $contentType->getMediaType() !== 'application/json') {
             return false;
         }
 
@@ -136,11 +135,7 @@ class ErrorListener extends AbstractListenerAggregate implements ListenerAggrega
 
         /** @var ContentType $contentType */
         $contentType = $request->getHeader('Content-type');
-        if($contentType == null) {
-            return false;
-        }
-
-        if($contentType->getMediaType() !== 'application/json') {
+        if($contentType === false || $contentType->getMediaType() !== 'application/json') {
             return false;
         }
 

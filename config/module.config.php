@@ -13,8 +13,8 @@ return [
 
     'entity_map' => require_once 'entity_map.config.php',
     'router' => require_once 'router.config.php',
-    'sebaks-view' => require_once 'sebaks-view.config.php',
     'api-router' => require_once 'api-router.config.php',
+//    'sebaks-view' => require_once 'sebaks-view.config.php',
 
     /**
      * default route schema: /basePath/v/path
@@ -65,7 +65,7 @@ return [
     'console' => [
         'router' => [
             'routes' => [
-                'feedback-init' => [
+                'api-module-init' => [
                     'options' => [
                         'route' => 'api init',
                         'defaults' => [
